@@ -1,10 +1,12 @@
 import RenderBirdCore #RenderBirdCore version 0.1.2
 from MapGeometryLoader import *
 import pygame
+import time
 
-r = RenderBirdCore.RenderBirdCore(camera_yaw=90,camera_x=0.85,camera_z=0.85)
+r = RenderBirdCore.RenderBirdCore(camera_yaw=90+45)#,camera_x=0.85,camera_z=0.85)
 
-fpslimit = r.FPS_Limiter(50)
+
+fpslimit = r.FPS_Limiter(60)
 
 r.set_background_color(176, 196, 222)
 
@@ -22,22 +24,39 @@ render_intro = True
 def return_false():
     return False
     
-
+question_mark_y_mod=0
 while r.running == True:
     fpslimit.code_start_point()
     r.clear_screen()
+    question_mark_y_mod+=0.1
+    if question_mark_y_mod>=100*math.pi:
+        question_mark_y_mod=0
+    render_map(r,mapa,r.camera,initial_camera_position,question_mark_y_mod)
     
-    render_map(r,mapa,r.camera)
-    #print(r.camera.position)
+    if r.key_pressed(pygame.K_f):
+        r.toggle_fullscreen()
+        time.sleep(2)
+    if r.key_pressed(pygame.K_ESCAPE):
+        r.safe_close()
+        
+    #if r.key_pressed(pygame.K_t):
+    #    r.camera.rotate(0,90,0)
+    #    time.sleep(1)
+    
     if render_intro==False:
-        if r.key_pressed(pygame.K_w): #and r.camera.forward_vector[0]>-0.5: 
-            r.camera.move(0,0,0.05) 
-        if r.key_pressed(pygame.K_s): #and r.camera.forward_vector[0]<-0.5: 
-            r.camera.move(0,0,-0.05) 
-        if r.key_pressed(pygame.K_a): 
-            r.camera.move(-0.05,0,0) 
-        if r.key_pressed(pygame.K_d): 
-            r.camera.move(0.05,0,0) 
+        if r.key_pressed(pygame.K_LSHIFT):
+            mnoznik_predkosci=2
+        else:
+            mnoznik_predkosci=1
+        if r.key_pressed(pygame.K_w):# and r.camera.forward_vector[0]>-0.5: 
+            r.camera.move(0,0,0.05*mnoznik_predkosci) 
+        if r.key_pressed(pygame.K_s):# and r.camera.forward_vector[0]<-0.5: 
+            r.camera.move(0,0,-0.05*mnoznik_predkosci) 
+        
+        #if r.key_pressed(pygame.K_a): 
+        #    r.camera.move(-0.05,0,0) 
+        #if r.key_pressed(pygame.K_d): 
+        #    r.camera.move(0.05,0,0) 
         
         if r.key_pressed(pygame.K_e): 
             r.camera.move(0,0.05,0) 
@@ -56,7 +75,7 @@ while r.running == True:
     render_controls = ControlsDisplayController.run_after_time(return_false)
     render_intro = IntroDisplayController.run_after_time(return_false)
     if render_intro == False:
-        IntroImage.move(-10,0)
+        IntroImage.move(-20,0)
     else:
         r.camera.rotate(0,1,0)
         r.camera.rotate(0,-1,0)
