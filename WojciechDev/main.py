@@ -3,10 +3,11 @@ from MapGeometryLoader import *
 import pygame
 import time
 
-r = RenderBirdCore.RenderBirdCore(camera_yaw=90+45)#,camera_x=0.85,camera_z=0.85)
+r = RenderBirdCore.RenderBirdCore(camera_yaw=90+90)#,camera_x=0.85,camera_z=0.85)
 
+r.camera.rotate_pitch(-10)
 
-fpslimit = r.FPS_Limiter(60)
+fpslimit = r.FPS_Limiter(45)
 
 r.set_background_color(176, 196, 222)
 

@@ -31,6 +31,7 @@ def calculate_side(x, y, width, height):
 
 def render_map(RenderBirdObject: RenderBirdCore.RenderBirdCore, map_list, camera, initial_camera_position,question_mark_y_mod: int,floor_height=-1, world_height=2, start_x=-1, start_z=-1):
     wall_color = normalize_color((216, 255, 149, 255)) #Zmien przezroczystosc ze 100 na 255
+    wall_color_with_edge = normalize_color((180, 220, 120, 255))
     floor_color = normalize_color((125, 133, 113, 255))
     ceiling_color = normalize_color((211, 211, 211, 255))
     #ceiling_color = normalize_color((211, 211, 211, 255))
@@ -73,34 +74,43 @@ def render_map(RenderBirdObject: RenderBirdCore.RenderBirdCore, map_list, camera
         for x, cell in enumerate(row):
             if cell is not None:
                 if cell['id'].lower() == "wall":
-                    # Draw the wall
-                    sciana = RenderBirdObject.RectangularPrism(
+                    if cell['frame']==True:
+                        sciana = RenderBirdObject.RectangularPrism(
+                        color_sides=True, color_front=wall_color_with_edge, color_back=wall_color_with_edge,
+                        color_bottom=wall_color_with_edge, color_left=wall_color_with_edge, color_right=wall_color_with_edge,
+                        color_top=wall_color_with_edge,
+                        width=1, depth=1, height=world_height,
+                        position=[start_x + x, floor_height + 1,
+                                  start_z + z]
+                        )
+                    
+                        RenderBirdObject.RectangularPrism(
+                            color_sides=False, frame_color=(0, 0, 0, 1),
+                            width=1.005, depth=1.002, height=world_height + 0.002,
+                            position=[start_x + x, floor_height + 1,
+                                      start_z + z]).draw()
+                    else:
+                        sciana = RenderBirdObject.RectangularPrism(
                         color_sides=True, color_front=wall_color, color_back=wall_color,
                         color_bottom=wall_color, color_left=wall_color, color_right=wall_color,
                         color_top=wall_color,
                         width=1, depth=1, height=world_height,
                         position=[start_x + x, floor_height + 1,
                                   start_z + z]
-                    )
-          
-                    RenderBirdObject.RectangularPrism(
-                            color_sides=False, frame_color=(0, 0, 0, 1),
-                            width=1.005, depth=1.0015, height=world_height + 0.001,
-                            position=[start_x + x, floor_height + 1,
-                                      start_z + z]).draw()
+                        )
                     sciana.draw()
                     detect_distance=0.8
                     while len(camera.detect_objects_in_view([sciana],detect_distance,90))>0: 
-                        camera.move(0,0,-0.01)
+                        camera.move(0,0,-0.05)
                     camera.rotate(0,90,0)
                     while len(camera.detect_objects_in_view([sciana],detect_distance,90))>0: 
-                        camera.move(0,0,-0.01)
+                        camera.move(0,0,-0.05)
                     camera.rotate(0,90,0)
                     while len(camera.detect_objects_in_view([sciana],detect_distance,90))>0: 
-                        camera.move(0,0,-0.01)
+                        camera.move(0,0,-0.05)
                     camera.rotate(0,90,0)
                     while len(camera.detect_objects_in_view([sciana],detect_distance,90))>0: 
-                        camera.move(0,0,-0.01)
+                        camera.move(0,0,-0.05)
                     camera.rotate(0,90,0)
                     
                     
