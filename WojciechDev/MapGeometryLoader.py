@@ -1,11 +1,14 @@
 import pickle
 import RenderBirdCore
 import copy
+
+
 def load_map_file(file:str):
     map_list=[]
     with open(file, 'rb') as file:
         map_list = pickle.load(file)
     return map_list
+
 
 '''def render_map(RenderBirdObject: RenderBirdCore.RenderBirdCore, map_list):
     for i in map_list:
@@ -117,15 +120,15 @@ def calculate_side(x, y, width, height):
                                                      position=[start_x + x, floor_height + 1 + i['position_diff'][1],
                                                               start_z + z]).draw()'''
 
-def render_map(RenderBirdObject: RenderBirdCore.RenderBirdCore, map_list, floor_height=-1, world_height=2, start_x=-1, start_z=-1):
-    wall_color = normalize_color((216, 255, 149, 255))
+def render_map(RenderBirdObject: RenderBirdCore.RenderBirdCore, map_list, camera, floor_height=-1, world_height=2, start_x=-1, start_z=-1):
+    wall_color = normalize_color((216, 255, 149, 100)) #Zmien przezroczystosc ze 100 na 255
     floor_color = normalize_color((125, 133, 113, 255))
     floor_position_recalc = calculate_side(start_x, start_z, len(map_list), len(map_list[0]))
 
     # Draw the floor
     RenderBirdObject.RectangularPrism(
-        width=3 * len(map_list), height=1, depth=3 * len(map_list[0]),
-        position=[floor_position_recalc[2] * 3, floor_height - 0.5, 2 * floor_position_recalc[3]],
+        width=1000, height=1, depth=1000,
+        position=[0,floor_height-0.5-0.5,0],
         color_sides=True, color_back=floor_color, color_bottom=floor_color,
         color_front=floor_color, color_left=floor_color, color_right=floor_color,
         color_top=floor_color
@@ -133,8 +136,8 @@ def render_map(RenderBirdObject: RenderBirdCore.RenderBirdCore, map_list, floor_
 
     # Draw the ceiling
     RenderBirdObject.RectangularPrism(
-        width=3 * len(map_list), height=1, depth=3 * len(map_list[0]),
-        position=[floor_position_recalc[2] * 3, floor_height + world_height + 1 - 0.5, 2 * floor_position_recalc[3]],
+        width=1000, height=floor_height+2.5+0.5, depth=1000,
+        position=[0,0,0],
         color_sides=True, color_back=floor_color, color_bottom=floor_color,
         color_front=floor_color, color_left=floor_color, color_right=floor_color,
         color_top=floor_color
@@ -178,24 +181,35 @@ def render_map(RenderBirdObject: RenderBirdCore.RenderBirdCore, map_list, floor_
     # Draw walls and frames
     for z, row in enumerate(map_list):
         for x, cell in enumerate(row):
-            if cell is not None and cell["name"].lower() == "wall":
-                # Draw the wall
-                RenderBirdObject.RectangularPrism(
-                    color_sides=True, color_front=wall_color, color_back=wall_color,
-                    color_bottom=wall_color, color_left=wall_color, color_right=wall_color,
-                    color_top=wall_color,
-                    width=1, depth=1, height=world_height,
-                    position=[start_x + x, floor_height + 1 + cell["position_diff"][1],
-                              start_z + z]
-                ).draw()
-
-                # Draw the black frame if it matches the patterns
-                if check_pattern(x, z, frame_patterns):
+            if cell is not None:
+                if cell['id'].lower() == "wall":
+                    # Draw the wall
                     RenderBirdObject.RectangularPrism(
-                        color_sides=False, frame_color=(0, 0, 0, 1),
-                        width=1.001, depth=1.001, height=world_height + 0.001,
-                        position=[start_x + x, floor_height + 1 + cell["position_diff"][1],
+                        color_sides=True, color_front=wall_color, color_back=wall_color,
+                        color_bottom=wall_color, color_left=wall_color, color_right=wall_color,
+                        color_top=wall_color,
+                        width=1, depth=1, height=world_height,
+                        position=[start_x + x, floor_height + 1,
                                   start_z + z]
                     ).draw()
 
+                    # Draw the black frame if it matches the patterns
+                    '''if check_pattern(x, z, frame_patterns):
+                        RenderBirdObject.RectangularPrism(
+                            color_sides=False, frame_color=(0, 0, 0, 1),
+                            width=1.005, depth=1.005, height=world_height + 0.001,
+                            position=[start_x + x, floor_height + 1,
+                                      start_z + z]
+                        ).draw()'''
+          
+                    RenderBirdObject.RectangularPrism(
+                            color_sides=False, frame_color=(0, 0, 0, 1),
+                            width=1.005, depth=1.005, height=world_height + 0.001,
+                            position=[start_x + x, floor_height + 1,
+                                      start_z + z]).draw()
+                #else:
+                if cell['id'].lower() == "teleport":
+                    teleport = RenderBirdObject.RectangularPrism(width=0.5,height=0.5,depth=0.5,color_sides=False, frame_color=(255,255,255,0),
+                                        position=[start_x + x, floor_height + 1,start_z + z]).draw()
+                    #if teleport.check_collission
 
