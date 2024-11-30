@@ -41,7 +41,7 @@ while r.running == True:
     if r.key_pressed(pygame.K_RIGHT):
         r.camera.rotate(0,2,0)
         
-    print(r.camera.forward_vector)
+    #print(r.camera.forward_vector)
     #r.camera.use_mouse_camera_controls(r.window_size_x,r.window_size_y,sensitivity=0.2,sensitivity_factor=1,reverse_horizontally=False,reverse_vertially=False,mouse_cursor_visible=True) 
     
     r.update_display()
