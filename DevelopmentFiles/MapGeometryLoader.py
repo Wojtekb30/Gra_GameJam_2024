@@ -124,6 +124,14 @@ def render_map(RenderBirdObject: RenderBirdCore.RenderBirdCore, map_list, camera
                         quest_x = start_x + x
                     else:
                         quest_x = 1000
+                        
+                    n=0
+                    if len(quests.finished_xs)>0:
+                        #print(quests.finished_xs)
+                        while n<len(quests.finished_xs):
+                            if quest_x==quests.finished_xs[n] and start_z + z==quests.finished_zs[n]:
+                                quest_x = 1000
+                            n=n+1
                     
                     quest_mark = RenderBirdObject.Model3D_STL("pytajnik.stl",None,(255,50,50,255),
                                                               [quest_x, floor_height+0.7+(math.sin(question_mark_y_mod)/5),start_z + z],0.5,(90*3,0,360*math.sin(question_mark_y_mod)/2))
@@ -138,7 +146,7 @@ def render_map(RenderBirdObject: RenderBirdCore.RenderBirdCore, map_list, camera
                         if quests.all_done==False:
                             RenderBirdObject.exit_fullscreen()
                             time.sleep(0.5)
-                            quests.run_quest()
+                            quests.run_quest(quest_mark_hitbox)
                 
                 
                 

@@ -1,12 +1,15 @@
 from AllQuests import *
 import random
 import os
+import RenderBirdCore
 
 class QuestController:
     def __init__(self):
-        self.quest_id = [1,2,3,5]
+        self.quest_id = [1,2,3,5] #nie uzywac questa 4
         self.tip_id = [0,1,2]
         self.all_done = False
+        self.finished_xs=[]
+        self.finished_zs=[]
         
     def read_success_file(self):
         filename = 'AnswerCorrect.txt'
@@ -16,7 +19,7 @@ class QuestController:
         else:
             return False 
         
-    def run_quest(self):
+    def run_quest(self,question_mark: RenderBirdCore.RenderBirdCore.RectangularPrism):
         num = random.choice(self.quest_id)
         tip = random.choice(self.tip_id)
         if num==1:
@@ -31,14 +34,18 @@ class QuestController:
             quest5(tip)
             
         result = self.read_success_file()
-        print(result)
+        #print(result)
         if result==True:
             self.quest_id.remove(num)
             self.tip_id.remove(tip)
-            
+        
+        
         if os.path.exists('AnswerCorrect.txt'):
             os.remove('AnswerCorrect.txt')
             
         if len(self.tip_id)<1:
             self.all_done = True
+            
+        self.finished_xs.append(question_mark.position[0])
+        self.finished_zs.append(question_mark.position[2])
         
