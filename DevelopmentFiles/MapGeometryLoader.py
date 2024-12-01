@@ -104,16 +104,16 @@ def render_map(RenderBirdObject: RenderBirdCore.RenderBirdCore, map_list, camera
                         )
                     sciana.draw()
                     detect_distance=0.8
-                    while len(camera.detect_objects_in_view([sciana],detect_distance,90))>0: 
+                    while len(camera.detect_objects_in_view([sciana],detect_distance,88))>0: 
                         camera.move(0,0,-0.05)
                     camera.rotate(0,90,0)
-                    while len(camera.detect_objects_in_view([sciana],detect_distance,90))>0: 
+                    while len(camera.detect_objects_in_view([sciana],detect_distance,88))>0: 
                         camera.move(0,0,-0.05)
                     camera.rotate(0,90,0)
-                    while len(camera.detect_objects_in_view([sciana],detect_distance,90))>0: 
+                    while len(camera.detect_objects_in_view([sciana],detect_distance,88))>0: 
                         camera.move(0,0,-0.05)
                     camera.rotate(0,90,0)
-                    while len(camera.detect_objects_in_view([sciana],detect_distance,90))>0: 
+                    while len(camera.detect_objects_in_view([sciana],detect_distance,88))>0: 
                         camera.move(0,0,-0.05)
                     camera.rotate(0,90,0)
                     
@@ -144,9 +144,14 @@ def render_map(RenderBirdObject: RenderBirdCore.RenderBirdCore, map_list, camera
                     
                     if len(camera.detect_objects_in_view([quest_mark_hitbox],2,10))>0 and RenderBirdObject.key_pressed(pygame.K_i):
                         if quests.all_done==False:
+                            was_fullscreen_used = RenderBirdObject.is_fullscreen
                             RenderBirdObject.exit_fullscreen()
                             time.sleep(0.5)
                             quests.run_quest(quest_mark_hitbox)
+                            if was_fullscreen_used == True:
+                                time.sleep(0.5)
+                                RenderBirdObject.toggle_fullscreen()
+                                time.sleep(1)
                 
                 
                 
@@ -162,7 +167,7 @@ def render_map(RenderBirdObject: RenderBirdCore.RenderBirdCore, map_list, camera
                     checkpoint.draw()
                     
                     
-                    if len(camera.detect_objects_in_view([checkpoint],2,10))>0 and RenderBirdObject.key_pressed(pygame.K_i):
+                    if len(camera.detect_objects_in_view([checkpoint],2,20))>0 and RenderBirdObject.key_pressed(pygame.K_i):
                         quests.checkpoint_processor(checkpoint.frame_color)
                         quests.set_render_2d_color_shape_index(checkpoint.frame_color)
                     
