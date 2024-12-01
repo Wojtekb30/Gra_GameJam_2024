@@ -2,14 +2,43 @@ from AllQuests import *
 import random
 import os
 import RenderBirdCore
+import time
 
 class QuestController:
     def __init__(self):
         self.quest_id = [1,2,3,5] #nie uzywac questa 4
         self.tip_id = [0,1,2]
-        self.all_done = False
+        self.all_done = False #In context of available quests
         self.finished_xs=[]
         self.finished_zs=[]
+        
+        self.checkpoint_order = []
+        self.game_done = False
+        self.checkpoint_fail = False
+        
+    def checkpoint_processor(self, color):
+        #Zielony, Jasnoniebieski, Żółty, Czerwony
+        #checkpoint_colors = [(0,1,0,1),(0,1,1,1),(1,1,0,1),(1,0,0,1)]
+        if len(self.checkpoint_order)==0:
+            self.checkpoint_order.append(color)
+            
+        if self.checkpoint_order[-1]!=color:
+            self.checkpoint_order.append(color)
+            
+        if self.checkpoint_order==[(0,1,0,1),(0,1,1,1),(1,1,0,1),(1,0,0,1)]:
+            self.game_done = True
+        
+        if len(self.checkpoint_order)>=4:
+            self.checkpoint_order=[]
+            self.checkpoint_fail = True
+        
+    def check_checkpoint_fail(self):
+        if self.checkpoint_fail == True:
+            self.checkpoint_fail = False
+            time.sleep(0.5)
+            return True
+        else:
+            return False
         
     def read_success_file(self):
         filename = 'AnswerCorrect.txt'

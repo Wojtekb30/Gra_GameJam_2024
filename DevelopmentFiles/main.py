@@ -23,6 +23,8 @@ IntroImage = r.Image_2D("Story1.bmp",0,0,r.window_size_x,r.window_size_y)
 render_controls = True
 render_intro = True
 
+WinImage = r.Image_2D("Win.bmp",-2000,0,r.window_size_x,r.window_size_y)
+
 def return_false():
     return False
     
@@ -86,13 +88,28 @@ while r.running == True:
         r.camera.rotate(0,-1,0)
     if render_controls == False:
         ControlsImage.move(-5,0)
-    if ControlsImage.x>-700: 
-        r.render_2d_objects([ControlsImage,IntroImage])
+    
+    if ControlsImage.x>2000:
+        ControlsImage.x=2000
+        IntroImage.x=2000
         
+    if quests.check_checkpoint_fail()==True:
+        print("There was checkpoint failure")
+        
+    if quests.game_done==True:
+        print("You won!")
+        WinImage.x=0
+        
+    r.render_2d_objects([ControlsImage,IntroImage,WinImage]) 
     #print(r.camera.forward_vector)
     #r.camera.use_mouse_camera_controls(r.window_size_x,r.window_size_y,sensitivity=0.2,sensitivity_factor=1,reverse_horizontally=False,reverse_vertially=False,mouse_cursor_visible=True) 
     
     r.update_display()
     r.handle_close_event_direct()
+    
+    if quests.game_done==True:
+        time.sleep(10)
+        r.safe_close()
+    
     fpslimit.code_end_point_limit_framerate()
 
