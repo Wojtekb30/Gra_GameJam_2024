@@ -34,16 +34,16 @@ def render_map(RenderBirdObject: RenderBirdCore.RenderBirdCore, map_list, camera
     wall_color_with_edge = normalize_color((180, 220, 120, 255))
     floor_color = normalize_color((125, 133, 113, 255))
     ceiling_color = normalize_color((211, 211, 211, 255))
-    #ceiling_color = normalize_color((211, 211, 211, 255))
-    #floor_position_recalc = calculate_side(start_x, start_z, len(map_list), len(map_list[0]))
-
-    RenderBirdObject.RectangularPrism(
+    
+    last_checkpoint_color_number=0
+    
+    '''RenderBirdObject.RectangularPrism(
         width=1000, height=1, depth=1000,
         position=[0,floor_height+2.5,0],
         color_sides=True, color_back=ceiling_color, color_bottom=ceiling_color,
         color_front=ceiling_color, color_left=ceiling_color, color_right=ceiling_color,
         color_top=ceiling_color
-    ).draw()
+    ).draw()'''
 
     RenderBirdObject.RectangularPrism(
         width=1000, height=1, depth=1000,
@@ -73,7 +73,7 @@ def render_map(RenderBirdObject: RenderBirdCore.RenderBirdCore, map_list, camera
     for z, row in enumerate(map_list):
         for x, cell in enumerate(row):
             if cell is not None:
-                if cell['id'].lower() == "wall":
+                if cell['id'] == "wall":
                     if cell['frame']==True:
                         sciana = RenderBirdObject.RectangularPrism(
                         color_sides=True, color_front=wall_color_with_edge, color_back=wall_color_with_edge,
@@ -115,17 +115,26 @@ def render_map(RenderBirdObject: RenderBirdCore.RenderBirdCore, map_list, camera
                     
                     
                 #else:
-                if cell['id'].lower() == "quest": #change to quest or something
+                if cell['id'] == "quest": #change to quest or something
                     
-                    quest_mark = RenderBirdObject.Model3D_STL("pytajnik.stl",None,(0,0,255,255),
+                    quest_mark = RenderBirdObject.Model3D_STL("pytajnik.stl",None,(255,50,50,255),
                                                               [start_x + x, floor_height+0.8+(math.sin(question_mark_y_mod)/4),start_z + z],0.5,(90*3,0,360*math.sin(question_mark_y_mod)/2))
                     
                     
-                    quest_mark_hitbox = RenderBirdObject.RectangularPrism(width=0.5,height=0.5,depth=0.5,color_sides=False, frame_color=(0,0,255//2,0),
+                    quest_mark_hitbox = RenderBirdObject.RectangularPrism(width=0.5,height=0.5,depth=0.5,color_sides=False, frame_color=(0,0,1,1),
                                         position=[start_x + x, floor_height + 1 ,start_z + z])
                     quest_mark.draw()
                     quest_mark_hitbox.draw()
-                    
+                
+                if cell['id']=="checkpoint":
+                    checkpoint_colors = [(1,0,0,1),(0,1,1,1),(0,1,0,1),(1,1,0,1)]
+                    checkpoint = RenderBirdObject.RectangularPrism(width=0.5,height=0.5,depth=0.5,color_sides=False, frame_color=checkpoint_colors[last_checkpoint_color_number],
+                                        position=[start_x + x, floor_height + 1 ,start_z + z])
+                    checkpoint.draw()
+                    last_checkpoint_color_number+=1
+                    if last_checkpoint_color_number>3:
+                        last_checkpoint_color_number=0
+
                                                          
                         
 
