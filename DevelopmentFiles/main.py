@@ -16,9 +16,15 @@ mapa = load_map_file('world.pkl')
 
 initial_camera_position = r.camera.position
 
+player = r.SoundManager(2)
+
+player.add_sound_to_memory("main","music.wav",True)
+
+player.play_sound('main')
+
 ControlsDisplayController = r.RunAfterTime(20)
-ControlsImage = r.Image_2D("Controls.bmp",10,10)
-IntroDisplayController = r.RunAfterTime(10) #set to 10
+ControlsImage = r.Image_2D("Controls.bmp",10,10,300,400)
+IntroDisplayController = r.RunAfterTime(6) #set to 10
 IntroImage = r.Image_2D("Story1.bmp",0,0,r.window_size_x,r.window_size_y)
 render_controls = True
 render_intro = True
@@ -56,6 +62,11 @@ while r.running == True:
     if r.key_pressed(pygame.K_ESCAPE):
         r.safe_close()
         
+    if r.key_pressed(pygame.K_p):
+        player.stop_sound('main')
+    if r.key_pressed(pygame.K_o):
+        player.play_sound('main')
+    
     #if r.key_pressed(pygame.K_t):
     #    r.camera.rotate(0,90,0)
     #    time.sleep(1)
