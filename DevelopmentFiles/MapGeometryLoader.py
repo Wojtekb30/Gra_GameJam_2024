@@ -41,13 +41,13 @@ def render_map(RenderBirdObject: RenderBirdCore.RenderBirdCore, map_list, camera
     
     last_checkpoint_color_number=0
     
-    '''RenderBirdObject.RectangularPrism(
+    RenderBirdObject.RectangularPrism(
         width=1000, height=1, depth=1000,
         position=[0,floor_height+2.5,0],
         color_sides=True, color_back=ceiling_color, color_bottom=ceiling_color,
         color_front=ceiling_color, color_left=ceiling_color, color_right=ceiling_color,
         color_top=ceiling_color
-    ).draw()'''
+    ).draw()
 
     RenderBirdObject.RectangularPrism(
         width=1000, height=1, depth=1000,
@@ -161,10 +161,10 @@ def render_map(RenderBirdObject: RenderBirdCore.RenderBirdCore, map_list, camera
                                         position=[start_x + x, floor_height + 1 ,start_z + z])
                     checkpoint.draw()
                     
+                    
                     if len(camera.detect_objects_in_view([checkpoint],2,10))>0 and RenderBirdObject.key_pressed(pygame.K_i):
                         quests.checkpoint_processor(checkpoint.frame_color)
-                        
-                        print(quests.checkpoint_order)
+                        quests.set_render_2d_color_shape_index(checkpoint.frame_color)
                     
                     last_checkpoint_color_number+=1
                     if last_checkpoint_color_number>3:

@@ -16,6 +16,26 @@ class QuestController:
         self.game_done = False
         self.checkpoint_fail = False
         
+        self.render_color_number = 0
+        self.render_2d_color_shape = False
+        
+    def set_render_2d_color_shape_index(self, color):
+        self.render_2d_color_shape = True
+        if color == (0,1,0,1):
+            self.render_color_number=0
+        if color == (0,1,1,1):
+            self.render_color_number=1
+        if color == (1,1,0,1):
+            self.render_color_number=2
+        if color == (1,0,0,1):
+            self.render_color_number=3
+            
+    def should_I_render_2d_color(self):
+        if self.render_2d_color_shape==True:
+            self.render_2d_color_shape = False
+            return True
+        return False
+        
     def checkpoint_processor(self, color):
         #Zielony, Jasnoniebieski, Żółty, Czerwony
         #checkpoint_colors = [(0,1,0,1),(0,1,1,1),(1,1,0,1),(1,0,0,1)]
