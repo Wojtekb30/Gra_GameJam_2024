@@ -1,0 +1,3 @@
+Trzeci checkpoint ma kolor Zolty.
+Drugi checkpoint ma kolor Jasnoniebieski.
+Czwarty checkpoint ma kolor Czerwony.

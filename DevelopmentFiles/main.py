@@ -2,10 +2,11 @@ import RenderBirdCore #RenderBirdCore version 0.1.2
 from MapGeometryLoader import *
 import pygame
 import time
+from QuestController import *
 
 r = RenderBirdCore.RenderBirdCore(camera_yaw=90+90)#,camera_x=0.85,camera_z=0.85)
 
-r.camera.rotate_pitch(-10)
+#r.camera.rotate_pitch(-10)
 
 fpslimit = r.FPS_Limiter(45)
 
@@ -26,13 +27,16 @@ def return_false():
     return False
     
 question_mark_y_mod=0
+
+quests = QuestController()
+
 while r.running == True:
     fpslimit.code_start_point()
     r.clear_screen()
     question_mark_y_mod+=0.1
     if question_mark_y_mod>=100*math.pi:
         question_mark_y_mod=0
-    render_map(r,mapa,r.camera,initial_camera_position,question_mark_y_mod)
+    render_map(r,mapa,r.camera,initial_camera_position,question_mark_y_mod,quests)
     
     if r.key_pressed(pygame.K_f):
         r.toggle_fullscreen()

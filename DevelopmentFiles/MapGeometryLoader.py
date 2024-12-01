@@ -3,6 +3,8 @@ import RenderBirdCore
 import copy
 import time
 import math
+from QuestController import *
+import pygame
 
 def load_map_file(file:str):
     map_list=[]
@@ -29,11 +31,13 @@ def calculate_side(x, y, width, height):
     return [x1, y1, x2, y2]
 
 
-def render_map(RenderBirdObject: RenderBirdCore.RenderBirdCore, map_list, camera, initial_camera_position,question_mark_y_mod: int,floor_height=-1, world_height=2, start_x=-1, start_z=-1):
+def render_map(RenderBirdObject: RenderBirdCore.RenderBirdCore, map_list, camera, initial_camera_position,question_mark_y_mod: int,quests,floor_height=-1, world_height=2, start_x=-1, start_z=-1):
     wall_color = normalize_color((216, 255, 149, 255)) #Zmien przezroczystosc ze 100 na 255
     wall_color_with_edge = normalize_color((180, 220, 120, 255))
     floor_color = normalize_color((125, 133, 113, 255))
     ceiling_color = normalize_color((211, 211, 211, 255))
+    
+    #quests = QuestController()
     
     last_checkpoint_color_number=0
     
@@ -115,16 +119,32 @@ def render_map(RenderBirdObject: RenderBirdCore.RenderBirdCore, map_list, camera
                     
                     
                 #else:
-                if cell['id'] == "quest": #change to quest or something
+                if cell['id'] == "quest": 
+                    if quests.all_done==False:
+                        quest_x = start_x + x
+                    else:
+                        quest_x = 1000
                     
                     quest_mark = RenderBirdObject.Model3D_STL("pytajnik.stl",None,(255,50,50,255),
-                                                              [start_x + x, floor_height+0.8+(math.sin(question_mark_y_mod)/4),start_z + z],0.5,(90*3,0,360*math.sin(question_mark_y_mod)/2))
+                                                              [quest_x, floor_height+0.7+(math.sin(question_mark_y_mod)/5),start_z + z],0.5,(90*3,0,360*math.sin(question_mark_y_mod)/2))
                     
                     
-                    quest_mark_hitbox = RenderBirdObject.RectangularPrism(width=0.5,height=0.5,depth=0.5,color_sides=False, frame_color=(0,0,1,1),
-                                        position=[start_x + x, floor_height + 1 ,start_z + z])
+                    quest_mark_hitbox = RenderBirdObject.RectangularPrism(width=0.5,height=1,depth=0.5,color_sides=False, frame_color=(0,0,1,1),
+                                        position=[quest_x, floor_height + 1 ,start_z + z])
                     quest_mark.draw()
                     quest_mark_hitbox.draw()
+                    
+                    if len(camera.detect_objects_in_view([quest_mark_hitbox],2,10))>0 and RenderBirdObject.key_pressed(pygame.K_i):
+                        if quests.all_done==False:
+                            RenderBirdObject.exit_fullscreen()
+                            time.sleep(0.5)
+                            quests.run_quest()
+                
+                
+                
+                
+                
+                
                 
                 if cell['id']=="checkpoint":
                     checkpoint_colors = [(1,0,0,1),(0,1,1,1),(0,1,0,1),(1,1,0,1)]
