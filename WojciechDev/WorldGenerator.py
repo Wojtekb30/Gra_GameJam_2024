@@ -121,9 +121,9 @@ for y, row in enumerate(matrix):
             }) 
         elif cell == 2:
             object_row.append({
-                "id": "teleport",
+                "id": "quest",
                 "position": (x, y, 0),
-                "name": f"#teleport{x}_{y}",
+                "name": f"#quest{x}_{y}",
                 "color": (0, 0, 0, 1),
                 "texture": "",
                 "blocked": True,
@@ -133,9 +133,9 @@ for y, row in enumerate(matrix):
             })  
         elif cell == 3:
             object_row.append({
-                "id": "quest",
+                "id": "checkpoint",
                 "position": (x, y, 0),
-                "name": f"#quest{x}_{y}",
+                "name": f"#checkpoint{x}_{y}",
                 "color": (0, 0, 0, 1),
                 "texture": "",
                 "hidden": False,

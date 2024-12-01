@@ -115,7 +115,7 @@ def render_map(RenderBirdObject: RenderBirdCore.RenderBirdCore, map_list, camera
                     
                     
                 #else:
-                if cell['id'].lower() == "teleport": #change to quest or something
+                if cell['id'].lower() == "quest": #change to quest or something
                     
                     quest_mark = RenderBirdObject.Model3D_STL("pytajnik.stl",None,(0,0,255,255),
                                                               [start_x + x, floor_height+0.8+(math.sin(question_mark_y_mod)/4),start_z + z],0.5,(90*3,0,360*math.sin(question_mark_y_mod)/2))
